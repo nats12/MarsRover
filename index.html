@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<title>Mars Rover</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        
+	</head>
+	<body>
+
+		<style>
+
+			.command-panel, .data-panel {
+				width: 500px;
+				margin: 0 auto;
+				text-align: center;
+				border: 1px solid gray;
+				padding: 40px;
+				border-radius: 2px;
+				margin-top: 30px;
+			}
+
+			span {
+				letter-spacing: 2px;
+				/*display: block;*/
+			}
+		</style>
+
+		<div class="command-panel">
+			<h2>Send commands</h2>
+			<input type="file" name="data" id="data">
+		</div>
+
+		<div class="data-panel" id=data-panel>
+		</div>
+		
+
+
+		<script src="mars-rover.js"></script>
+		<script>
+
+			// Create new rover object
+			rover = new MarsRover();
+
+
+			// Element selectors
+			const dataPanel = document.querySelector('#data-panel');
+			const commandFile = document.querySelector('input[type="file"]');
+
+			// Append rover's position to HTML.
+			let position = document.createElement('h4');
+			position.innerHTML = `Rover 1 is currently at position: ${rover.position}`;
+			dataPanel.appendChild(position);
+
+
+			/**
+			 * Continue reading through the rovers
+			 * @return {[type]} [description]
+			 */
+			// function continue(startAt) {
+
+			// 	startAt += 2;
+			// 	console.log(startAt);
+			// }
+
+
+
+			/**
+			 * Send commands to the rover.
+			 */
+			function setCommands() {
+
+				let file = this.files[0],
+		        reader = new FileReader();
+		       
+
+		        reader.onload = function(progressEvent) {
+
+		            // Split each line
+		            let lines = this.result.split('\n');
+
+		            // Split plateau values
+		            let plateau = lines[0].split(' ');
+		            rover.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
+		            // Split position values
+		            let position = lines[1].split(' ');
+		            rover.position = [parseInt(position[0]), parseInt(position[1]), position[2]];
+		            // Split location values
+		            let location = lines[1].split(' ');
+		            rover.location = [parseInt(location[0]), parseInt(location[1])];
+		            // Split commands
+		            let commands = lines[2].split(' ');
+		            rover.commands = commands.toString().toLowerCase();
+
+		            // Call the navigate function with the txt file lines
+		            rover.navigate(rover.commands);
+
+		            // Reset file upload field to clear value for new one
+		            commandFile.value = null;
+					
+		            lines.shift();
+
+		            // An array with commands only
+					let roversArray = lines.filter((element, index) => {
+					  	return index % 2 === 0;
+					});
+
+					// An array with rover positions only
+					let commandsArray = lines.filter((element, index) => {
+						// Remove the risk of empty strings being returned when it reaches the end of the file
+					  	return index % 2 !== 0 && index != null;
+					});
+
+					console.log(roversArray);
+
+					// Create an object 
+				  	let combine = roversArray.reduce(function(result, field, index) {
+				    	result[commandsArray[index]] = field;
+				    	field = rover.commands;
+				    	field = rover.position;
+				    	return result;
+				  	}, {});
+				
+
+					for (var k in combine) {
+					    var obj = new MarsRover(combine[k]);
+					    obj.position = combine[k];
+					    obj.commands = k;
+					    console.log(obj);
+					}
+		        };
+
+		        reader.readAsText(file);
+
+			}
+
+
+			// Listener for file upload
+			commandFile.addEventListener('change', setCommands);
+
+		</script>
+	</body>
+</html>

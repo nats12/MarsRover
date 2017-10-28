@@ -1,0 +1,14 @@
+{
+  "name": "Mars Rover",
+  "version": "1.0.0",
+  "description": "Mars Rover solution",
+  "main": "mars-rover.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^2.8.0"
+  }
+}
