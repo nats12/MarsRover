@@ -24,7 +24,6 @@
 
 			span {
 				letter-spacing: 2px;
-				/*display: block;*/
 			}
 		</style>
 
@@ -43,6 +42,7 @@
 
 			// Create new rover object
 			rover = new MarsRover();
+			rover.ID = 1;
 
 
 			// Element selectors
@@ -51,20 +51,8 @@
 
 			// Append rover's position to HTML.
 			let position = document.createElement('h4');
-			position.innerHTML = `Rover 1 is currently at position: ${rover.position}`;
-			dataPanel.appendChild(position);
-
-
-			/**
-			 * Continue reading through the rovers
-			 * @return {[type]} [description]
-			 */
-			// function continue(startAt) {
-
-			// 	startAt += 2;
-			// 	console.log(startAt);
-			// }
-
+			// position.innerHTML = `Rover ${rover.ID} is currently at position: ${rover.position}`;
+			// dataPanel.appendChild(position);
 
 
 			/**
@@ -81,59 +69,57 @@
 		            // Split each line
 		            let lines = this.result.split('\n');
 
-		            // Split plateau values
-		            let plateau = lines[0].split(' ');
-		            rover.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
-		            // Split position values
-		            let position = lines[1].split(' ');
-		            rover.position = [parseInt(position[0]), parseInt(position[1]), position[2]];
-		            // Split location values
-		            let location = lines[1].split(' ');
-		            rover.location = [parseInt(location[0]), parseInt(location[1])];
-		            // Split commands
-		            let commands = lines[2].split(' ');
-		            rover.commands = commands.toString().toLowerCase();
+		            rover.readFile(lines);
 
-		            // Call the navigate function with the txt file lines
-		            rover.navigate(rover.commands);
-
-		            // Reset file upload field to clear value for new one
-		            commandFile.value = null;
+	
 					
-		            lines.shift();
+					
+					// console.log(combine);
+					// var newArray = [];
 
-		            // An array with commands only
-					let roversArray = lines.filter((element, index) => {
-					  	return index % 2 === 0;
-					});
+				  	// For every combination of a rover and its command, create a new rover object
+					// for (var k in combine) {	
+					// 	// Create a new rover object
+					//     var obj = new MarsRover(combine[k], combine[k][4], rover.plateau);
+					//     newArray.push(obj);
+					//     // And assign values
+					//     obj.position = combine[k];
+					//     obj.commands = k;
+					//     obj.location = [parseInt(combine[k][0]), parseInt(combine[k][2])];
+					//     // Increment each object ID
+					//     newArray.forEach(combination => obj.ID++); 
 
-					// An array with rover positions only
-					let commandsArray = lines.filter((element, index) => {
-						// Remove the risk of empty strings being returned when it reaches the end of the file
-					  	return index % 2 !== 0 && index != null;
-					});
+					//     console.log(obj);
+					// }
 
-					console.log(roversArray);
+					// console.log(newArray);
+				    // For every new object in the objects array, call the navigate function
+				    // for (var ob in newArray) {
+				    	// for(i = 0; i < newArray[ob].commands.length; i++) {
+				    	// 	rover.navigate(newArray[ob].commands.toString().toLowerCase());
+				    	// }
+				    	// Call the navigate function with the txt file command lines
+	            		// rover.navigate(newArray[ob].commands.toString().toLowerCase());
+	            		// console.log(obj);					    
+	            	// }
 
-					// Create an object 
-				  	let combine = roversArray.reduce(function(result, field, index) {
-				    	result[commandsArray[index]] = field;
-				    	field = rover.commands;
-				    	field = rover.position;
-				    	return result;
-				  	}, {});
-				
+					// for (var i = 0; i < newArray.length; i++) {
+					//     o = newArray[i];
 
-					for (var k in combine) {
-					    var obj = new MarsRover(combine[k]);
-					    obj.position = combine[k];
-					    obj.commands = k;
-					    console.log(obj);
-					}
+					//  //    for (var p in o) {
+					// 	//     if (o.hasOwnProperty(p) && o.ID == 3) {
+					// 	//     	console.log(o)
+					// 	//         return o;
+					// 	//     }
+					// 	// }
+					// }
+
+					// Reset file upload field to clear value for new one
+		            commandFile.value = null;
+
 		        };
 
 		        reader.readAsText(file);
-
 			}
 
 

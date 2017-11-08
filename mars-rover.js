@@ -11,11 +11,13 @@ class MarsRover {
 	 * @param  {[array]} The size of the plateau (grid).
 	 * @return {[void]}
 	 */
-	constructor(location, direction, plateau) {
+	constructor(location, direction, plateau, ID) {
 
         this.location = location === undefined ? [0, 0] : location;
         this.direction = direction === undefined ? 'N' : direction;
         this.plateau = plateau === undefined ? [10, 10] : plateau;
+        this.ID = ID === undefined ? 0 : ID;
+
         this.commands = this.commands === undefined ? [] : this.commands; 
         this.position = [...this.location, this.direction];
 
@@ -150,7 +152,7 @@ class MarsRover {
 	 */
 	navigate(commands) {
 
-	    this.commands = commands;
+	    // this.commands = commands;
 
 	 //    var position = document.createElement('h4');
 		// position.innerHTML = `Rover 1 is currently at position: ${rover.position}`;
@@ -160,8 +162,8 @@ class MarsRover {
 	        return this.commands;
 	    } else {
 	        // For every character in the line of command
-	        for(let i = 0; i < this.commands.length; i++) {
-	            let command = this.commands[i];
+	        for(let i = 0; i < commands.length; i++) {
+	            let command = commands[i];
 	            // Call the move function if the command is f/b
 	            if(command === 'm') {
 	                this.move(command);
@@ -172,19 +174,63 @@ class MarsRover {
 
 	            // Append a new line with the new rover position
             	var position = document.createElement('h4');
-				position.innerHTML = `Rover 1 is currently at position: ${rover.position}`;
+				position.innerHTML = `Rover ${rover.ID} is currently at position: ${rover.position}`;
 				dataPanel.appendChild(position); 
 	        }
 	    }
 	    
+	    
+
 	    // Update rover position
 	    this.position = [...this.location, this.direction];
-
-	    
 
 	    // Update the rover's position
 	    return this.position;
 	}
+
+
+	readFile(lines) {
+
+
+		// Split plateau values
+        let plateau = lines[0].split(' ');
+        this.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
+
+        let position = lines[1].split(' ');
+        rover.position = [parseInt(position[0]), parseInt(position[1]), position[2]];
+        
+
+ 		// Remove the plateau value
+        lines.shift();
+
+
+         // An array with rover positions only
+		let roversArray = lines.filter((element, index) => {
+		  	return index % 2 === 0;
+		});
+
+		// An array with commands only
+		let commandsArray = lines.filter((element, index) => {
+			// Remove the risk of empty strings being returned when it reaches the end of the file
+		  	return index % 2 !== 0 && index != null;
+		});
+
+		this.commands = commandsArray.toString().toLowerCase();
+		let location = roversArray.toString().split(' ');
+
+		this.location = [parseInt(location[0]), parseInt(location[1])];
+		
+		rover.navigate(rover.commands);
+
+		// Create an object 
+	  	let combine = roversArray.reduce(function(result, field, index) {
+	    	result[commandsArray[index]] = field;
+	    	field = rover.commands;
+	    	field = rover.position;
+	    	return result;
+	  	}, {});	  	
+	}
 }
+
 
 module.exports = MarsRover;
