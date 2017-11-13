@@ -59,8 +59,8 @@
 		            let lines = this.result.split('\n');
 
 		            // Split plateau values
-			        let plateau = lines[0].split(' ');
-			        this.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
+			        let plateauSize = lines[0].split(' ');
+			        this.plateau = [parseInt(plateauSize[0]), parseInt(plateauSize[1])];
 
 		            // Remove the plateau value
         			lines.shift();
@@ -88,6 +88,12 @@
 						rovers.push(rover);
 					}
 
+					// Empty obstacles array
+					var obstacles = [];
+
+			
+	
+
 					// Rover ID counter
 					var counter = 0;
 
@@ -102,6 +108,8 @@
 								rovers[i].location = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1])];
 								rovers[i].position = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1]), roversArray[i].split(' ')[2]];
 								rovers[i].commands = commandsArray[i].toLowerCase();
+								rovers[i].plateau = this.plateau;
+								rovers[i].obstacles = obstacles;
 							}	
 						}
 
@@ -109,6 +117,17 @@
 						counter += 1;
 						rovers[i].ID = counter;
 
+						
+						// Map each rover location into an obstacle array object
+						obstacles.push({x: rovers[i].location[0], y: rovers[i].location[1]});
+
+						// But filter out their own location
+						// var ownLocation = rovers.filter(function(obj) {
+						//   	return obj.ID == rovers[i].ID;
+						// });
+
+
+						// console.log(ownLocation);
 						// Make each rover navigate with their corresponding commands
 						rovers[i].navigate(rovers[i].commands);
 
@@ -121,25 +140,20 @@
 						var obstacle = rovers.filter(function(obj) {
 							return obj.ID == rovers[i].ID;
 						});
-
-						// rovers.shift(obstacle);
-
-						// var ob = {
-						// 	x: 0,
-						// }
-
-						// var combine = roversArray.reduce(function(result, field, index) {
-					 //    	result[ob.x] = field;
-	 				// 		field = roversArray[i];
-					 //    	return result;
-					 //  	}, {}); 
 					}
 
 						
-					// console.log(combine);
 
-					// Populate the grid with the rovers
-					var grid = new Grid(rovers);
+
+					
+
+					// Create a plateau holding rovers and their locations as obstacles, from the text file
+					var plateau = new Plateau(rovers, obstacles);
+	
+
+					// console.log(obstacles);
+					console.log(plateau);
+
 
 					// Reset file upload field to clear value for new one
 		            commandFile.value = null;

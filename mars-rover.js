@@ -11,7 +11,7 @@ class MarsRover {
 	 * @param  {[array]} The size of the plateau (grid).
 	 * @return {[void]}
 	 */
-	constructor(location, direction, plateau, ID) {
+	constructor(location, direction, plateau, obstacles, ID) {
 
         this.location = location === undefined ? [0, 0] : location;
         this.direction = direction === undefined ? 'N' : direction;
@@ -22,12 +22,7 @@ class MarsRover {
         this.position = [...this.location, this.direction];
 
         // Rovers 
-        this.obstacles = [
-
-        	{x: 2, y: 5},
-        	{x: 7, y: 5},
-        	{x: 9, y: 5},
-        ]
+        this.obstacles = this.obstacles === undefined ? [] : obstacles;
     }
 
 
@@ -152,12 +147,6 @@ class MarsRover {
 	 */
 	navigate(commands) {
 
-	    // this.commands = commands;
-
-	 //    var position = document.createElement('h4');
-		// position.innerHTML = `Rover 1 is currently at position: ${rover.position}`;
-		// dataPanel.appendChild(position);
-
 	    if (commands === undefined) {
 	        return this.commands;
 	    } else {
@@ -171,11 +160,6 @@ class MarsRover {
 	            } else if (command === 'l' || command === 'r') {
 	                this.turn(command);
 	            }
-
-	            // Append a new line with the new rover position
-    //         	var position = document.createElement('h4');
-				// position.innerHTML = `Rover ${rover.ID} is currently at position: ${rover.position}`;
-				// dataPanel.appendChild(position); 
 	        }
 	    }
 	    
@@ -192,9 +176,9 @@ class MarsRover {
 
 
 /**
- * The Grid class.
+ * The plateau class.
  */
-class Grid {
+class Plateau {
 
 	/**
 	 * The Grid class constructor.
@@ -203,12 +187,12 @@ class Grid {
 	 * @param  {[array]} The size of the plateau (grid).
 	 * @return {[void]}
 	 */
-	constructor(rovers) {
+	constructor(rovers, obstacles) {
 
 		this.rovers = rovers;
-       
-    }
 
+		this.obstacles = obstacles;
+    }
 }
 
 
