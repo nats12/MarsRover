@@ -44,56 +44,26 @@
 			const dataPanel = document.querySelector('#data-panel');
 			const commandFile = document.querySelector('input[type="file"]');
 
+			function createRovers(rovers, roversArray) {
+
+				// For each rover direction in the text file
+				for(var c = 0; c < roversArray.length; c++) {
+					// Create a new rover
+					var rover = new MarsRover();
+					// Push the rover into a rovers array
+					rovers.push(rover);
+				}
+			}
+
+
 			/**
-			 * Send commands to the rover.
+			 * [assignValues description]
+			 * @param  {[type]} rovers [description]
+			 * @return {[type]}        [description]
 			 */
-			function setCommands() {
-
-				let file = this.files[0],
-		        reader = new FileReader();
-		       
-
-		        reader.onload = function(progressEvent) {
-
-		            // Split each line
-		            let lines = this.result.split('\n');
-
-		            // Split plateau values
-			        let plateauSize = lines[0].split(' ');
-			        this.plateau = [parseInt(plateauSize[0]), parseInt(plateauSize[1])];
-
-		            // Remove the plateau value
-        			lines.shift();
-
-
-					// An array with rover positions only
-					let roversArray = lines.filter((element, index) => {
-					  	return index % 2 === 0;
-					});
-
-					// An array with commands only
-					let commandsArray = lines.filter((element, index) => {
-						// Remove the risk of empty strings being returned when it reaches the end of the file
-					  	return index % 2 !== 0 && index != null;
-					});
-
-					// Array holding rover objects
-					var rovers = [];
-
-					// For each rover direction in the text file
-					for(var c = 0; c < roversArray.length; c++) {
-						// Create a new rover
-						var rover = new MarsRover();
-						// Push the rover into a rovers array
-						rovers.push(rover);
-					}
-
-					// Empty obstacles array
-					var obstacles = [];
+			function assignValues(rovers, roversArray, commandsArray, obstacles) {
 
 			
-	
-
 					// Rover ID counter
 					var counter = 0;
 
@@ -103,7 +73,7 @@
 						for(var k = 0; k < roversArray.length; k++) {
 							// For each rover command line in the text file
 							for(var l = 0; l < commandsArray.length; l++) {
-								// Adjust each rover object their values
+								// Give each rover object their values
 								rovers[i].direction = roversArray[i].split(' ')[2];
 								rovers[i].location = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1])];
 								rovers[i].position = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1]), roversArray[i].split(' ')[2]];
@@ -117,7 +87,7 @@
 						counter += 1;
 						rovers[i].ID = counter;
 
-						
+
 						// Map each rover location into an obstacle array object
 						obstacles.push({x: rovers[i].location[0], y: rovers[i].location[1]});
 
@@ -141,19 +111,80 @@
 							return obj.ID == rovers[i].ID;
 						});
 					}
+			}
 
-						
+
+			/**
+			 * [createPlateau description]
+			 * @return {[type]} [description]
+			 */
+			function createPlateau(roversArray, commandsArray) {
+
+				// Empty rovers array
+				var rovers = [];
+
+				// Empty obstacles array
+				var obstacles = [];
+
+				// Call function to create rovers
+				createRovers(rovers, roversArray);
+
+				// Call function to populate rovers with values
+				assignValues(rovers, roversArray, commandsArray, obstacles);
+				
+
+				// Create a plateau holding rovers and their locations as obstacles, from the text file
+				var plateau = new Plateau(rovers, obstacles);
+				console.log(plateau);
+			}
+
+			/**
+			 * [splitData description]
+			 * @param  {[type]} lines [description]
+			 * @return {[type]}       [description]
+			 */
+			function splitData(lines) {
+
+				// Split plateau values
+		        let plateauSize = lines[0].split(' ');
+		        this.plateau = [parseInt(plateauSize[0]), parseInt(plateauSize[1])];
+
+	            // Remove the plateau value
+    			lines.shift();
 
 
-					
+				// An array with rover positions only
+				let roversArray = lines.filter((element, index) => {
+				  	return index % 2 === 0;
+				});
 
-					// Create a plateau holding rovers and their locations as obstacles, from the text file
-					var plateau = new Plateau(rovers, obstacles);
-	
+				// An array with commands only
+				let commandsArray = lines.filter((element, index) => {
+					// Remove the risk of empty strings being returned when it reaches the end of the file
+				  	return index % 2 !== 0 && index != null;
+				});	
 
-					// console.log(obstacles);
-					console.log(plateau);
+				// Call function to create plateau
+				createPlateau(roversArray, commandsArray);
+			}
 
+
+			/**
+			 * Send commands to the rover.
+			 */
+			function readFile() {
+
+				let file = this.files[0],
+		        reader = new FileReader();
+		       
+
+		        reader.onload = function(progressEvent) {
+
+		            // Split each line
+		            let lines = this.result.split('\n');
+
+		            // Split data from text file into array
+		            splitData(lines);
 
 					// Reset file upload field to clear value for new one
 		            commandFile.value = null;
@@ -165,7 +196,7 @@
 
 
 			// Listener for file upload
-			commandFile.addEventListener('change', setCommands);
+			commandFile.addEventListener('change', readFile);
 
 		</script>
 	</body>
