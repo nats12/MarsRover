@@ -173,9 +173,9 @@ class MarsRover {
 	            }
 
 	            // Append a new line with the new rover position
-            	var position = document.createElement('h4');
-				position.innerHTML = `Rover ${rover.ID} is currently at position: ${rover.position}`;
-				dataPanel.appendChild(position); 
+    //         	var position = document.createElement('h4');
+				// position.innerHTML = `Rover ${rover.ID} is currently at position: ${rover.position}`;
+				// dataPanel.appendChild(position); 
 	        }
 	    }
 	    
@@ -186,49 +186,6 @@ class MarsRover {
 
 	    // Update the rover's position
 	    return this.position;
-	}
-
-
-	readFile(lines) {
-
-
-		// Split plateau values
-        let plateau = lines[0].split(' ');
-        this.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
-
-        let position = lines[1].split(' ');
-        rover.position = [parseInt(position[0]), parseInt(position[1]), position[2]];
-        
-
- 		// Remove the plateau value
-        lines.shift();
-
-
-        // An array with rover positions only
-		let roversArray = lines.filter((element, index) => {
-		  	return index % 2 === 0;
-		});
-
-		// An array with commands only
-		let commandsArray = lines.filter((element, index) => {
-			// Remove the risk of empty strings being returned when it reaches the end of the file
-		  	return index % 2 !== 0 && index != null;
-		});
-
-		this.commands = commandsArray.toString().toLowerCase();
-		let location = roversArray.toString().split(' ');
-
-		this.location = [parseInt(location[0]), parseInt(location[1])];
-		
-		rover.navigate(rover.commands);
-
-		// Create an object 
-	  	let combine = roversArray.reduce(function(result, field, index) {
-	    	result[commandsArray[index]] = field;
-	    	field = rover.commands;
-	    	field = rover.position;
-	    	return result;
-	  	}, {});	  	
 	}
 }
 

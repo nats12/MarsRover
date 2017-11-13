@@ -40,20 +40,9 @@
 		<script src="mars-rover.js"></script>
 		<script>
 
-			// Create new rover object
-			rover = new MarsRover();
-			rover.ID = 1;
-
-
 			// Element selectors
 			const dataPanel = document.querySelector('#data-panel');
 			const commandFile = document.querySelector('input[type="file"]');
-
-			// Append rover's position to HTML.
-			let position = document.createElement('h4');
-			// position.innerHTML = `Rover ${rover.ID} is currently at position: ${rover.position}`;
-			// dataPanel.appendChild(position);
-
 
 			/**
 			 * Send commands to the rover.
@@ -73,19 +62,8 @@
 			        let plateau = lines[0].split(' ');
 			        this.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
 
-		            // rover.readFile(lines);
 		            // Remove the plateau value
         			lines.shift();
-
-	
-					var rover1 = new MarsRover();
-					var rover2 = new MarsRover();
-					var rover3 = new MarsRover();
-					var rover4 = new MarsRover();
-					var rover5 = new MarsRover();
-
-
-					var rovers = [rover1, rover2, rover3, rover4, rover5];
 
 
 					// An array with rover positions only
@@ -99,7 +77,18 @@
 					  	return index % 2 !== 0 && index != null;
 					});
 
+					// Array holding rover objects
+					var rovers = [];
 
+					// For each rover direction in the text file
+					for(var c = 0; c < roversArray.length; c++) {
+						// Create a new rover
+						var rover = new MarsRover();
+						// Push the rover into a rovers array
+						rovers.push(rover);
+					}
+
+					// Rover ID counter
 					var counter = 0;
 
 					// For each rover object in the rovers array
@@ -113,25 +102,43 @@
 								rovers[i].location = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1])];
 								rovers[i].position = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1]), roversArray[i].split(' ')[2]];
 								rovers[i].commands = commandsArray[i].toLowerCase();
-							}
+							}	
 						}
 
 						// Increment their ID
 						counter += 1;
 						rovers[i].ID = counter;
 
-						// Navigate using each rover's commands
+						// Make each rover navigate with their corresponding commands
 						rovers[i].navigate(rovers[i].commands);
 
-						// Append a new line with each rover's final position
-		            	var position = document.createElement('h4');
-						position.innerHTML = `Rover ${rovers[i].ID} is currently at position: ${rovers[i].position}`;
-						dataPanel.appendChild(position); 
-						console.log('done');
+						// Append a line to the HTML file confirming each rover's final position
+						var position = document.createElement('h4');
+						position.innerHTML = `Rover ${rovers[i].ID}'s final position is: ${rovers[i].position}`;
+						dataPanel.appendChild(position);
 
+						// Discard each rover's own ID 
+						var obstacle = rovers.filter(function(obj) {
+							return obj.ID == rovers[i].ID;
+						});
+
+						// rovers.shift(obstacle);
+
+						// var ob = {
+						// 	x: 0,
+						// }
+
+						// var combine = roversArray.reduce(function(result, field, index) {
+					 //    	result[ob.x] = field;
+	 				// 		field = roversArray[i];
+					 //    	return result;
+					 //  	}, {}); 
 					}
 
-					// Make a new grid with 5 rovers
+						
+					// console.log(combine);
+
+					// Populate the grid with the rovers
 					var grid = new Grid(rovers);
 
 					// Reset file upload field to clear value for new one
