@@ -204,7 +204,7 @@ class MarsRover {
         lines.shift();
 
 
-         // An array with rover positions only
+        // An array with rover positions only
 		let roversArray = lines.filter((element, index) => {
 		  	return index % 2 === 0;
 		});
@@ -231,6 +231,31 @@ class MarsRover {
 	  	}, {});	  	
 	}
 }
+
+
+
+/**
+ * The Grid class.
+ */
+class Grid {
+
+	/**
+	 * The Grid class constructor.
+	 * @param  {[array]} A rover's location on the x and y axis.
+	 * @param  {[string]} A rover's direction.
+	 * @param  {[array]} The size of the plateau (grid).
+	 * @return {[void]}
+	 */
+	constructor(rovers) {
+
+		this.rovers = rovers;
+       
+    }
+
+}
+
+
+
 
 
 module.exports = MarsRover;

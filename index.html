@@ -69,50 +69,70 @@
 		            // Split each line
 		            let lines = this.result.split('\n');
 
-		            rover.readFile(lines);
+		            // Split plateau values
+			        let plateau = lines[0].split(' ');
+			        this.plateau = [parseInt(plateau[0]), parseInt(plateau[1])];
+
+		            // rover.readFile(lines);
+		            // Remove the plateau value
+        			lines.shift();
 
 	
-					
-					
-					// console.log(combine);
-					// var newArray = [];
+					var rover1 = new MarsRover();
+					var rover2 = new MarsRover();
+					var rover3 = new MarsRover();
+					var rover4 = new MarsRover();
+					var rover5 = new MarsRover();
 
-				  	// For every combination of a rover and its command, create a new rover object
-					// for (var k in combine) {	
-					// 	// Create a new rover object
-					//     var obj = new MarsRover(combine[k], combine[k][4], rover.plateau);
-					//     newArray.push(obj);
-					//     // And assign values
-					//     obj.position = combine[k];
-					//     obj.commands = k;
-					//     obj.location = [parseInt(combine[k][0]), parseInt(combine[k][2])];
-					//     // Increment each object ID
-					//     newArray.forEach(combination => obj.ID++); 
 
-					//     console.log(obj);
-					// }
+					var rovers = [rover1, rover2, rover3, rover4, rover5];
 
-					// console.log(newArray);
-				    // For every new object in the objects array, call the navigate function
-				    // for (var ob in newArray) {
-				    	// for(i = 0; i < newArray[ob].commands.length; i++) {
-				    	// 	rover.navigate(newArray[ob].commands.toString().toLowerCase());
-				    	// }
-				    	// Call the navigate function with the txt file command lines
-	            		// rover.navigate(newArray[ob].commands.toString().toLowerCase());
-	            		// console.log(obj);					    
-	            	// }
 
-					// for (var i = 0; i < newArray.length; i++) {
-					//     o = newArray[i];
+					// An array with rover positions only
+					let roversArray = lines.filter((element, index) => {
+					  	return index % 2 === 0;
+					});
 
-					//  //    for (var p in o) {
-					// 	//     if (o.hasOwnProperty(p) && o.ID == 3) {
-					// 	//     	console.log(o)
-					// 	//         return o;
-					// 	//     }
-					// 	// }
-					// }
+					// An array with commands only
+					let commandsArray = lines.filter((element, index) => {
+						// Remove the risk of empty strings being returned when it reaches the end of the file
+					  	return index % 2 !== 0 && index != null;
+					});
+
+
+					var counter = 0;
+
+					// For each rover object in the rovers array
+					for(var i = 0; i < rovers.length; i++) {
+						// For each rover position in the text file
+						for(var k = 0; k < roversArray.length; k++) {
+							// For each rover command line in the text file
+							for(var l = 0; l < commandsArray.length; l++) {
+								// Adjust each rover object their values
+								rovers[i].direction = roversArray[i].split(' ')[2];
+								rovers[i].location = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1])];
+								rovers[i].position = [parseInt(roversArray[i].split(' ')[0]), parseInt(roversArray[i].split(' ')[1]), roversArray[i].split(' ')[2]];
+								rovers[i].commands = commandsArray[i].toLowerCase();
+							}
+						}
+
+						// Increment their ID
+						counter += 1;
+						rovers[i].ID = counter;
+
+						// Navigate using each rover's commands
+						rovers[i].navigate(rovers[i].commands);
+
+						// Append a new line with each rover's final position
+		            	var position = document.createElement('h4');
+						position.innerHTML = `Rover ${rovers[i].ID} is currently at position: ${rovers[i].position}`;
+						dataPanel.appendChild(position); 
+						console.log('done');
+
+					}
+
+					// Make a new grid with 5 rovers
+					var grid = new Grid(rovers);
 
 					// Reset file upload field to clear value for new one
 		            commandFile.value = null;
