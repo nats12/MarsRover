@@ -95,17 +95,20 @@
 						counter += 1;
 						rovers[i].ID = counter;
 
+						// Make each rover navigate with their corresponding commands
+						rovers[i].navigate(rovers[i].commands);
 
 						// Map each rover location into an obstacle array object
 						obstacles.push({x: rovers[i].location[0], y: rovers[i].location[1]});
 
 						// But discard each rover's own location 
-						// var obstacle = rovers.filter(function(obj) {
-						// 	return obj.ID == rovers[i].ID;
+						// var obstacle = obstacles.filter(function(obj) {
+						// 	return obj.x == rovers[i].location[0];
 						// });
 
-						// Make each rover navigate with their corresponding commands
-						rovers[i].navigate(rovers[i].commands);
+						// obstacles.shift(obstacle);
+
+						
 
 						// Append a line to the DOM confirming each rover's final position
 						var position = document.createElement('h4');

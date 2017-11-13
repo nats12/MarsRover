@@ -16,13 +16,11 @@ class MarsRover {
         this.location = location === undefined ? [0, 0] : location;
         this.direction = direction === undefined ? 'N' : direction;
         this.plateau = plateau === undefined ? [10, 10] : plateau;
+        this.obstacles = this.obstacles === undefined ? [] : obstacles;
+        this.commands = commands === undefined ? 'lmmrmm' : commands;
         this.ID = ID === undefined ? 0 : ID;
 
-        this.commands = commands === undefined ? 'lmmrmm' : commands;
         this.position = [...this.location, this.direction];
-
-        // Obstacles 
-        this.obstacles = this.obstacles === undefined ? [] : obstacles;
     }
 
 
