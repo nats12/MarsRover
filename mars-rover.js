@@ -11,17 +11,17 @@ class MarsRover {
 	 * @param  {[array]} The size of the plateau (grid).
 	 * @return {[void]}
 	 */
-	constructor(location, direction, plateau, obstacles, ID) {
+	constructor(location, direction, plateau, obstacles, commands, ID) {
 
         this.location = location === undefined ? [0, 0] : location;
         this.direction = direction === undefined ? 'N' : direction;
         this.plateau = plateau === undefined ? [10, 10] : plateau;
         this.ID = ID === undefined ? 0 : ID;
 
-        this.commands = this.commands === undefined ? [] : this.commands; 
+        this.commands = commands === undefined ? 'lmmrmm' : commands;
         this.position = [...this.location, this.direction];
 
-        // Rovers 
+        // Obstacles 
         this.obstacles = this.obstacles === undefined ? [] : obstacles;
     }
 
@@ -38,8 +38,8 @@ class MarsRover {
 
 
     /**
-     * The move function moves the rover either forwards or backwards.
-     * @param  {[string]} Either 'f' for forward or 'b' for backwards.
+     * The move function moves the rover.
+     * @param  {[string]} 'm' for move.
      * @return {[array]}  The rover's location.
      */
     move(command) {
@@ -142,7 +142,7 @@ class MarsRover {
 
 	/**
 	 * The navigate function decides whether the turn or the move function should be called.
-	 * @param  {[string]} A line of commands i.e. 'lrfrblr'.
+	 * @param  {[string]} A line of commands i.e. 'lrmrmlr'.
 	 * @return {[string]} The rover's updated position.
 	 */
 	navigate(commands) {
@@ -153,7 +153,7 @@ class MarsRover {
 	        // For every character in the line of command
 	        for(let i = 0; i < commands.length; i++) {
 	            let command = commands[i];
-	            // Call the move function if the command is f/b
+	            // Call the move function if the command is m
 	            if(command === 'm') {
 	                this.move(command);
 	            // Call the turn function if the command is l/r
@@ -177,21 +177,22 @@ class MarsRover {
 
 /**
  * The plateau class.
+ * Used to hold an array of rovers.
  */
 class Plateau {
 
 	/**
-	 * The Grid class constructor.
-	 * @param  {[array]} A rover's location on the x and y axis.
-	 * @param  {[string]} A rover's direction.
-	 * @param  {[array]} The size of the plateau (grid).
+	 * The Plateau class constructor.
+	 * @param  {[array]} An array of rover objects.
+	 * @param  {[string]} An array of rover location objects.
+	 * @param  {[array]} The size of the plateau.
 	 * @return {[void]}
 	 */
-	constructor(rovers, obstacles) {
+	constructor(rovers, obstacles, size) {
 
-		this.rovers = rovers;
-
-		this.obstacles = obstacles;
+		this.rovers = rovers == undefined ? [] : rovers;
+		this.obstacles = obstacles == undefined ? [] : obstacles;
+		this.size = size == undefined ? [10, 10] : size;
     }
 }
 

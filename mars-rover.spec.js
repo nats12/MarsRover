@@ -14,9 +14,9 @@ describe('Given the start position (x,y) and directions N,S,E,W, a rover should'
 
 describe('A rover should receive a set of commands', function() {
     var rover = new MarsRover();
-    rover.navigate('lrfb');
+    rover.navigate('lmmrmm');
     it('in the form of characters', function() {
-        expect(rover.commands).toEqual('lrfb');
+        expect(rover.commands).toEqual('lmmrmm');
     });
 
 });
@@ -26,51 +26,26 @@ describe('When moving a rover backwards and forwards, it\'s position should', fu
     // Forwards
     it('increase by one on the y axis when moving North', function() {
         var rover = new MarsRover([10,10], 'N');
-        rover.navigate(['f']);
+        rover.navigate(['m']);
         expect(rover.location).toEqual([10,11]);
     });
 
     it('decrease by one on the y axis when moving South', function() {
         var rover = new MarsRover([10,10], 'S');
-        rover.navigate(['f']);
+        rover.navigate(['m']);
         expect(rover.location).toEqual([10,9]);
     });
 
     it('increase by one on the x axis when moving East', function() {
         var rover = new MarsRover([10,10], 'E');
-        rover.navigate(['f']);
+        rover.navigate(['m']);
         expect(rover.location).toEqual([11,10]);
     });
 
     it('decrease by one on the x axis when moving West', function() {
         var rover = new MarsRover([10,10], 'W');
-        rover.navigate(['f']);
+        rover.navigate(['m']);
         expect(rover.location).toEqual([9,10]);
-    });
-
-    // Backwards
-    it('decrease by one on the y axis when moving backwards facing North', function() {
-        var rover = new MarsRover([10,10], 'N');
-        rover.navigate(['b']);
-        expect(rover.location).toEqual([10,9]);
-    });
-
-    it('increase by one on the y axis when moving backwards facing South', function() {
-        var rover = new MarsRover([10,10], 'S');
-        rover.navigate(['b']);
-        expect(rover.location).toEqual([10,11]);
-    });
-
-    it('decrease by one on the x axis when moving backwards facing East', function() {
-        var rover = new MarsRover([10,10], 'E');
-        rover.navigate(['b']);
-        expect(rover.location).toEqual([9,10]);
-    });
-
-    it('increase by one on the x axis when moving backwards facing West', function() {
-        var rover = new MarsRover([10,10], 'W');
-        rover.navigate(['b']);
-        expect(rover.location).toEqual([11,10]);
     });
 });
 

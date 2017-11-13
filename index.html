@@ -44,6 +44,12 @@
 			const dataPanel = document.querySelector('#data-panel');
 			const commandFile = document.querySelector('input[type="file"]');
 
+			/**
+			 * The createRovers function creates a rover object for each rover in the text file
+			 * @param  {[type]} rovers      An array of rover objects.
+			 * @param  {[type]} roversArray An array of rover positions from the text file.
+			 * @return {[void]}  
+			 */
 			function createRovers(rovers, roversArray) {
 
 				// For each rover direction in the text file
@@ -57,13 +63,15 @@
 
 
 			/**
-			 * [assignValues description]
-			 * @param  {[type]} rovers [description]
-			 * @return {[type]}        [description]
+			 * The assignValues function gives each rover its values based on the text file data
+			 * @param  {[type]} rovers        An array of rover objects.
+			 * @param  {[type]} roversArray   An array of rover positions from the text file.
+			 * @param  {[type]} commandsArray An array of rover commands from the text file.
+			 * @param  {[type]} obstacles     An array of rover locations as obstacles.
+			 * @return {[void]}
 			 */
 			function assignValues(rovers, roversArray, commandsArray, obstacles) {
 
-			
 					// Rover ID counter
 					var counter = 0;
 
@@ -91,34 +99,31 @@
 						// Map each rover location into an obstacle array object
 						obstacles.push({x: rovers[i].location[0], y: rovers[i].location[1]});
 
-						// But filter out their own location
-						// var ownLocation = rovers.filter(function(obj) {
-						//   	return obj.ID == rovers[i].ID;
+						// But discard each rover's own location 
+						// var obstacle = rovers.filter(function(obj) {
+						// 	return obj.ID == rovers[i].ID;
 						// });
 
-
-						// console.log(ownLocation);
 						// Make each rover navigate with their corresponding commands
 						rovers[i].navigate(rovers[i].commands);
 
-						// Append a line to the HTML file confirming each rover's final position
+						// Append a line to the DOM confirming each rover's final position
 						var position = document.createElement('h4');
 						position.innerHTML = `Rover ${rovers[i].ID}'s final position is: ${rovers[i].position}`;
 						dataPanel.appendChild(position);
-
-						// Discard each rover's own ID 
-						var obstacle = rovers.filter(function(obj) {
-							return obj.ID == rovers[i].ID;
-						});
 					}
 			}
 
 
 			/**
-			 * [createPlateau description]
-			 * @return {[type]} [description]
+			 * The createPlateau function calls functions to create rovers, assign values to these rovers, 
+			 * and create and populate a plateau with these rovers.
+			 * @param  {[type]} roversArray   An array of rover positions from the text file.
+			 * @param  {[type]} commandsArray An array of rover commands from the text file.
+			 * @param  {[type]} plateau       Size of the plateau from the text file.
+			 * @return {[void]}
 			 */
-			function createPlateau(roversArray, commandsArray) {
+			function createPlateau(roversArray, commandsArray, plateau) {
 
 				// Empty rovers array
 				var rovers = [];
@@ -134,20 +139,20 @@
 				
 
 				// Create a plateau holding rovers and their locations as obstacles, from the text file
-				var plateau = new Plateau(rovers, obstacles);
+				var plateau = new Plateau(rovers, obstacles, plateau);
 				console.log(plateau);
 			}
 
 			/**
 			 * [splitData description]
 			 * @param  {[type]} lines [description]
-			 * @return {[type]}       [description]
+			 * @return {[void]}
 			 */
 			function splitData(lines) {
 
 				// Split plateau values
 		        let plateauSize = lines[0].split(' ');
-		        this.plateau = [parseInt(plateauSize[0]), parseInt(plateauSize[1])];
+		        plateau = [parseInt(plateauSize[0]), parseInt(plateauSize[1])];
 
 	            // Remove the plateau value
     			lines.shift();
@@ -165,12 +170,14 @@
 				});	
 
 				// Call function to create plateau
-				createPlateau(roversArray, commandsArray);
+				createPlateau(roversArray, commandsArray, plateau);
 			}
 
 
 			/**
-			 * Send commands to the rover.
+			 * The readFile function reads the lines in the text file, and calls a function to split 
+			 * the data up into arrays.
+			 * @return {[void]}
 			 */
 			function readFile() {
 
@@ -191,6 +198,7 @@
 
 		        };
 
+		        // Read the file
 		        reader.readAsText(file);
 			}
 
