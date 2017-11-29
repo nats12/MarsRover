@@ -33,6 +33,17 @@ class MarsRover {
     	return this.obstacles.some((obstacle) => obstacle.x === x && obstacle.y === y);
     }
 
+    /**
+     * Reset location if it is outside of the plateau's size
+     * @return {[type]} [description]
+     */
+    resetLocation() {
+
+    	this.location = [
+            (this.location[0] + this.plateau[0]) % this.plateau[0],
+            (this.location[1] + this.plateau[1]) % this.plateau[1]
+        ];
+    }
 
 
     /**
@@ -159,6 +170,9 @@ class MarsRover {
 	                this.turn(command);
 	            }
 	        }
+
+	        this.resetLocation();
+	        this.commands = commands;
 	    }
 	    
 	    
@@ -186,10 +200,10 @@ class Plateau {
 	 * @param  {[array]} The size of the plateau.
 	 * @return {[void]}
 	 */
-	constructor(rovers, obstacles, size) {
+	constructor(rovers, size) {
 
 		this.rovers = rovers == undefined ? [] : rovers;
-		this.obstacles = obstacles == undefined ? [] : obstacles;
+		// this.obstacles = obstacles == undefined ? [] : obstacles;
 		this.size = size == undefined ? [10, 10] : size;
     }
 }
