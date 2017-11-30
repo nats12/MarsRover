@@ -52,10 +52,14 @@
 			 */
 			function createRovers(rovers, roversArray) {
 
+				// Create factory object
+				var objectFactory = new PlateauObjectFactory();
+
 				// For each rover direction in the text file
 				for(var c = 0; c < roversArray.length; c++) {
-					// Create a new rover
-					var rover = new MarsRover();
+					// Create a new rover object
+					
+					var rover = objectFactory.getPlateauObject("marsrover");
 					// Push the rover into a rovers array
 					rovers.push(rover);
 				}

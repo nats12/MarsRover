@@ -1,5 +1,13 @@
 
 /**
+ * 
+ */
+class PlateauObject{
+
+}
+
+
+/**
  * The MarsRover class.
  */
 class MarsRover {
@@ -208,8 +216,26 @@ class Plateau {
     }
 }
 
+/**
+ * The PlateauObjectFactory class
+ * Acting as a Factory class making objects depending on its function parameter
+ */
+class PlateauObjectFactory {
 
+	/**
+	 * The getPlateauObject function accepts a string then makes an object depending on the string
+	 * @param  {[type]} objectType [description]
+	 * @return {[type]}            [description]
+	 */
+	getPlateauObject(objectType) {
 
+		if(objectType === "marsrover") {
+			return new MarsRover();
+		} else {
+			console.log('No objects found on the plateau.');
+		}
+	}
+}
 
 
 module.exports = MarsRover;
