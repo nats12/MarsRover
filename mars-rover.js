@@ -2,15 +2,23 @@
 /**
  * 
  */
-class PlateauObject{
+class PlateauObject {
 
+	constructor(location, ID) {
+
+		this.location = location === undefined ? [0, 0] : location;
+		this.ID = ID === undefined ? 0 : ID;
+	}
 }
 
+
+var p = new PlateauObject();
+console.log(p);
 
 /**
  * The MarsRover class.
  */
-class MarsRover {
+class MarsRover extends PlateauObject {
 
 	/**
 	 * The MarsRover class constructor.
@@ -21,12 +29,12 @@ class MarsRover {
 	 */
 	constructor(location, direction, plateau, obstacles, commands, ID) {
 
-        this.location = location === undefined ? [0, 0] : location;
+		super(location, ID);
         this.direction = direction === undefined ? 'N' : direction;
         this.plateau = plateau === undefined ? [10, 10] : plateau;
         this.obstacles = this.obstacles === undefined ? [] : obstacles;
         this.commands = commands === undefined ? 'lmmrmm' : commands;
-        this.ID = ID === undefined ? 0 : ID;
+        
 
         this.position = [...this.location, this.direction];
     }
@@ -217,22 +225,22 @@ class Plateau {
 }
 
 /**
- * The PlateauObjectFactory class
+ * The PlanetObjectFactory class
  * Acting as a Factory class making objects depending on its function parameter
  */
-class PlateauObjectFactory {
+class PlanetObjectFactory {
 
 	/**
-	 * The getPlateauObject function accepts a string then makes an object depending on the string
+	 * The getPlanetObject function accepts a string then makes an object depending on the string
 	 * @param  {[type]} objectType [description]
 	 * @return {[type]}            [description]
 	 */
-	getPlateauObject(objectType) {
+	getPlanetObject(objectType) {
 
 		if(objectType === "marsrover") {
 			return new MarsRover();
-		} else {
-			console.log('No objects found on the plateau.');
+		} else if(objectType === "plateau") {
+			return new Plateau();
 		}
 	}
 }
