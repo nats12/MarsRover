@@ -1,24 +1,8 @@
 
 /**
- * 
- */
-class PlateauObject {
-
-	constructor(location, ID) {
-
-		this.location = location === undefined ? [0, 0] : location;
-		this.ID = ID === undefined ? 0 : ID;
-	}
-}
-
-
-var p = new PlateauObject();
-console.log(p);
-
-/**
  * The MarsRover class.
  */
-class MarsRover extends PlateauObject {
+class MarsRover {
 
 	/**
 	 * The MarsRover class constructor.
@@ -27,16 +11,13 @@ class MarsRover extends PlateauObject {
 	 * @param  {[array]} The size of the plateau (grid).
 	 * @return {[void]}
 	 */
-	constructor(location, direction, plateau, obstacles, commands, ID) {
+	constructor(position, plateauSize, obstacles) {
 
-		super(location, ID);
-        this.direction = direction === undefined ? 'N' : direction;
-        this.plateau = plateau === undefined ? [10, 10] : plateau;
+        this.plateauSize = plateauSize === undefined ? [10, 10] : plateauSize;
         this.obstacles = this.obstacles === undefined ? [] : obstacles;
-        this.commands = commands === undefined ? 'lmmrmm' : commands;
         
 
-        this.position = [...this.location, this.direction];
+        this.position = position === undefined ? [0,0, "N"] : position;
     }
 
 
@@ -46,20 +27,21 @@ class MarsRover extends PlateauObject {
      */
     checkObstacles(x, y) {
 
-    	return this.obstacles.some((obstacle) => obstacle.x === x && obstacle.y === y);
+    	return this.obstacles.some((obstacle, index) => obstacle[0] === x && obstacle[1] === y);
     }
 
     /**
      * Reset location if it is outside of the plateau's size
      * @return {[type]} [description]
      */
-    resetLocation() {
+    // resetPosition() {
 
-    	this.location = [
-            (this.location[0] + this.plateau[0]) % this.plateau[0],
-            (this.location[1] + this.plateau[1]) % this.plateau[1]
-        ];
-    }
+    // 	this.position = [
+    //         (this.position[0] + this.plateauSize.x) % this.plateauSize.x,
+    //         (this.position[1] + this.plateauSize.y) % this.plateauSize.y,
+    //         this.position[2]
+    //     ];
+    // }
 
 
     /**
@@ -74,7 +56,7 @@ class MarsRover extends PlateauObject {
 		let y = 0;
 
 		// When moving forwards, increase/decrease the x and y axis depending on the direction it is facing.
-		switch(this.direction) {
+		switch(this.position[2]) {
 			case 'N':
 				y++;
 			break;
@@ -97,11 +79,11 @@ class MarsRover extends PlateauObject {
 
 
 	    // Update the x and y axis location points.
-		this.location[0] += x;
-		this.location[1] += y;
+		this.position[0] += x;
+		this.position[1] += y;
 
 		// Check for obstacles
-	    if (this.checkObstacles(this.location[0], this.location[1])) {
+	    if (this.checkObstacles(this.position[0], this.position[1])) {
 	    	// Append a new line with the new rover position
             let position = document.createElement('span');
             position.innerHTML = "This spot is taken!";
@@ -109,8 +91,8 @@ class MarsRover extends PlateauObject {
 	    }
 
 	    // Update the rover's position with its location and direction
-	    this.position = [...this.location, this.direction];
-	    return this.location;
+	    this.position = this.position;
+	    return [this.position[0], this.position[1]];
 	}
 
 
@@ -126,7 +108,7 @@ class MarsRover extends PlateauObject {
 	    // When turning the rover, update the direction depending on the direction it is currently facing.
 	    if(command === 'l') {
 
-	        switch(this.direction) {
+	        switch(this.position[2]) {
 	            case 'N':
 	                newDirection = 'W';
 	            break;
@@ -142,7 +124,7 @@ class MarsRover extends PlateauObject {
 	        }
 	    } else if(command === 'r') {
 
-	        switch(this.direction) {
+	        switch(this.position[2]) {
 	            case 'N':
 	                newDirection = 'E';
 	            break;
@@ -159,9 +141,9 @@ class MarsRover extends PlateauObject {
 	    }
 
 	    // Update the rover's position with its location and direction
-	    this.position = [...this.location, newDirection];
+	    this.position = [this.position[0], this.position[1], newDirection];
 	    // Update the direction
-		return this.direction = newDirection;  
+		return this.position[2] = newDirection;  
 	}
 
 
@@ -187,14 +169,14 @@ class MarsRover extends PlateauObject {
 	            }
 	        }
 
-	        this.resetLocation();
+	        // this.resetPosition();
 	        this.commands = commands;
 	    }
 	    
 	    
 
 	    // Update rover position
-	    this.position = [...this.location, this.direction];
+	    this.position = [this.position[0], this.position[1], this.position[2]];
 
 	    // Update the rover's position
 	    return this.position;
@@ -216,11 +198,13 @@ class Plateau {
 	 * @param  {[array]} The size of the plateau.
 	 * @return {[void]}
 	 */
-	constructor(rovers, size) {
+	constructor(x = 0 , y = 0) {
 
-		this.rovers = rovers == undefined ? [] : rovers;
+		this.x = x;
+		this.y = y;
+		// this.rovers = rovers == undefined ? [] : rovers;
 		// this.obstacles = obstacles == undefined ? [] : obstacles;
-		this.size = size == undefined ? [10, 10] : size;
+		// this.size = size == undefined ? [10, 10] : size;
     }
 }
 
