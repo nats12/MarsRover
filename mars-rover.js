@@ -13,10 +13,8 @@ class MarsRover {
 	 */
 	constructor(position, plateauSize, obstacles) {
 
-        this.plateauSize = plateauSize === undefined ? [10, 10] : plateauSize;
+        this.plateauSize = plateauSize === undefined ? {x: 10, y: 10} : plateauSize;
         this.obstacles = this.obstacles === undefined ? [] : obstacles;
-        
-
         this.position = position === undefined ? [0,0, "N"] : position;
     }
 
@@ -27,21 +25,21 @@ class MarsRover {
      */
     checkObstacles(x, y) {
 
-    	return this.obstacles.some((obstacle, index) => obstacle[0] === x && obstacle[1] === y);
+    	return this.obstacles.some(obstacle => obstacle.x === x || obstacle.y === y);
     }
 
     /**
      * Reset location if it is outside of the plateau's size
      * @return {[type]} [description]
      */
-    // resetPosition() {
+    resetPosition() {
 
-    // 	this.position = [
-    //         (this.position[0] + this.plateauSize.x) % this.plateauSize.x,
-    //         (this.position[1] + this.plateauSize.y) % this.plateauSize.y,
-    //         this.position[2]
-    //     ];
-    // }
+    	this.position = [
+    		(this.position[0] + this.plateauSize.x) % this.plateauSize.x,
+    		(this.position[1] + this.plateauSize.y) % this.plateauSize.y,
+    		this.position[2]
+    	];
+    }
 
 
     /**
@@ -91,8 +89,7 @@ class MarsRover {
 	    }
 
 	    // Update the rover's position with its location and direction
-	    this.position = this.position;
-	    return [this.position[0], this.position[1]];
+	    return this.position;
 	}
 
 
@@ -169,14 +166,16 @@ class MarsRover {
 	            }
 	        }
 
-	        // this.resetPosition();
 	        this.commands = commands;
 	    }
-	    
-	    
+	   
 
 	    // Update rover position
 	    this.position = [this.position[0], this.position[1], this.position[2]];
+
+	    if(this.position[0] > this.plateauSize.x || this.position[1] > this.plateauSize.y) {
+	        	this.resetPosition();
+	    }
 
 	    // Update the rover's position
 	    return this.position;
