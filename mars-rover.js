@@ -16,6 +16,8 @@ class MarsRover {
         this.plateauSize = plateauSize === undefined ? {x: 10, y: 10} : plateauSize;
         this.obstacles = this.obstacles === undefined ? [] : obstacles;
         this.position = position === undefined ? [0,0, "N"] : position;
+
+        // this.obstacles = this.obstacles.filter(cleanArray);
     }
 
 
@@ -25,7 +27,7 @@ class MarsRover {
      */
     checkObstacles(x, y) {
 
-    	return this.obstacles.some(obstacle => obstacle.x === x || obstacle.y === y);
+    	return this.obstacles.some(obstacle => obstacle.x == x || obstacle.y == y);
     }
 
     /**
